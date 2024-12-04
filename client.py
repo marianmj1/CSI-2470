@@ -28,7 +28,7 @@ def send_credentials(username, password):
             response = pickle.loads(client_socket.recv(1024))
 
             if response["status"] == "failed":
-                messagebox.showerror("Login Failed", "Incorrect password. Please try again.")
+                messagebox.showerror("Login Failed", "Incorrect username or password. Please try again.")
                 # Retry credentials
                 username = input("Enter username: ")
                 password = input("Enter password: ")
@@ -66,7 +66,9 @@ def receive_messages():
     while True:
         try:
             message = client_socket.recv(1024).decode('utf-8')
+            chat_box.config(state='normal')  # Enable chat box
             chat_box.insert(tk.END, message + '\n')  # Display received message in chat box
+            chat_box.config(state='disabled')  # Disable chat box again
             chat_box.yview(tk.END)  # Scroll to the bottom
         except:
             break
@@ -75,7 +77,7 @@ def receive_messages():
 window = tk.Tk()
 window.title("Chat Application CSI 2470 Project")
 
-chat_box = scrolledtext.ScrolledText(window, width=50, height=20, wrap=tk.WORD, state='normal')
+chat_box = scrolledtext.ScrolledText(window, width=50, height=20, wrap=tk.WORD, state='disabled')
 chat_box.pack(padx=10, pady=10)
 
 message_entry = tk.Entry(window, width=40)
